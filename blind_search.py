@@ -11,7 +11,7 @@ class Node:
 
 
 def bfs(problem):
-    node = Node(state = problem.initialState, path_cost = 0)
+    node = Node(state = problem.initial_state, path_cost = 0)
     if problem.goal_test(node.state):
         return __solution(node)
     frontier = [node]
@@ -30,7 +30,7 @@ def bfs(problem):
 
 
 def uniform_cost(problem):
-    node = Node(state = problem.initialState, path_cost = 0)
+    node = Node(state = problem.initial_state, path_cost = 0)
     frontier = [node]
     explored = []
     while True:
@@ -49,7 +49,7 @@ def uniform_cost(problem):
 
             
 def dfs(problem):
-    node = Node(state = problem.initialState, path_cost = 0)
+    node = Node(state = problem.initial_state, path_cost = 0)
     if problem.goal_test(node.state):
         return __solution(node)
     frontier = [node]
@@ -68,7 +68,7 @@ def dfs(problem):
 
 
 def dfs_visited(problem):
-    node = Node(state = problem.initialState, path_cost = 0)
+    node = Node(state = problem.initial_state, path_cost = 0)
     if problem.goal_test(node.state):
         return __solution(node)
     frontier = [node]
@@ -87,7 +87,7 @@ def dfs_visited(problem):
 
 
 def dls(problem, limit):
-    node = Node(state = problem.initialState)
+    node = Node(state = problem.initial_state)
     return __recursive_dls(node, problem, limit)
 
 

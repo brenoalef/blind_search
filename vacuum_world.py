@@ -7,8 +7,8 @@ class VacuumWorld:
 
     actions_list = [LEFT, RIGHT, SUCK]
 
-    def __init__(self, initialState):
-        self.initialState = initialState
+    def __init__(self, initial_state):
+        self.initial_state = initial_state
 
     def goal_test(self, state):
         return len(state[1]) == 0
@@ -26,6 +26,7 @@ class VacuumWorld:
 
     def step_cost(self, state, action):
         return 1
+
 
 problem = VacuumWorld((VacuumWorld.LEFT, [VacuumWorld.LEFT, VacuumWorld.RIGHT]))
 print(dfs(problem))

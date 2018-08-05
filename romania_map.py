@@ -22,7 +22,6 @@ class RomaniaMap:
     VASLUI = "Vaslui"
     ZERIND = "Zerind"
 
-
     map = {
         ARAD: [(ZERIND, 75), (TIMISOARA, 118), (SIBIU, 140)],
         BUCHAREST: [(URZICENI, 85), (GIURGIU, 90), (PITESTI, 101), (FAGARAS, 211)],
@@ -46,8 +45,8 @@ class RomaniaMap:
         ZERIND: [(ORADEA, 71), (ARAD, 75)]
     }
 
-    def __init__(self, initialState, goal):
-        self.initialState = initialState
+    def __init__(self, initial_state, goal):
+        self.initial_state = initial_state
         self.goal = goal
 
     def goal_test(self, state):
@@ -61,6 +60,7 @@ class RomaniaMap:
 
     def step_cost(self, state, action):
         return action[1]
+
 
 problem = RomaniaMap(RomaniaMap.ARAD, RomaniaMap.BUCHAREST)
 #print(dfs(problem))
