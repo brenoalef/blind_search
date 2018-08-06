@@ -1,6 +1,8 @@
-from blind_search import *
-from math import ceil
+import time
 from tkinter import *
+from math import ceil
+from functools import partial
+from blind_search import *
 
 class EightQueen:
     def __init__(self, initial_state):
@@ -26,16 +28,28 @@ class EightQueen:
         return 1
 
 
-def show(positions):
-    root = Tk()
-    root.title('8-Queens')
-    canvas = Canvas(root, bg = 'white', height = 500, width = 500)
-    canvas.pack(side = TOP, padx = 10, pady = 10)
-    queen = PhotoImage(file = "queen.gif")
-    queen = queen.subsample(8, 8)
-    x =1
-    y =1
-    square_size = 500/8
+root = Tk()
+root.title('8-Queens')
+canvas = Canvas(root, bg = 'white', height = 500, width = 500)
+canvas.pack(side = TOP, padx = 10, pady = 10)
+queen = PhotoImage(file = "queen.gif")
+queen = queen.subsample(8, 8)
+square_size = 500/8
+images = []
+
+def update_pos(pos):
+    l = ceil(pos / 8) - 1
+    c = 1 + (pos - 1) % 8 - 1
+    images.append(canvas.create_image(c * square_size , l * square_size, anchor = NW, image = queen))
+
+
+def clear_show(search):
+    for image in images:
+        canvas.delete(image)
+    search(problem, callback = update_pos)
+
+
+def show(problem):    
     for rows in range(8):
         color_white = not (rows % 2)
         for columns in range(8):
@@ -43,28 +57,65 @@ def show(positions):
             x = columns * square_size
             y = rows * square_size
             canvas.create_rectangle(x, y, x + square_size, y + square_size, fill = color)
-            if rows * 8 + columns + 1 in positions:
-                canvas.create_image(x, y, anchor = NW, image = queen)
             color_white = not color_white
 
-    bou1 = Button(root, text = 'Close', width = 25, command = root.quit)
+    bou1 = Button(root, text = 'DLS', width = 10, command = partial(clear_show, partial(dls_agent, limit=8)))
+    bou2 = Button(root, text = 'DFS', width = 10, command = partial(clear_show, dfs_agent))
+    bou3 = Button(root, text = 'BFS', width = 10, command = partial(clear_show, bfs_agent))
+    bou4 = Button(root, text = 'DFS VISITED', width = 10, command = partial(clear_show, dfs_visited_agent))
+    bou5 = Button(root, text = 'IDS', width = 10, command = partial(clear_show, ids_agent))
+    bou6 = Button(root, text = 'UNIFORM COST', width = 10, command = partial(clear_show, uniform_cost_agent))
     bou1.pack(side = RIGHT, padx = 10, pady = 10)
+    bou2.pack(side = RIGHT, padx = 10, pady = 10)
+    bou3.pack(side = RIGHT, padx = 10, pady = 10)
+    bou4.pack(side = RIGHT, padx = 10, pady = 10)
+    bou5.pack(side = RIGHT, padx = 10, pady = 10)
+    bou6.pack(side = RIGHT, padx = 10, pady = 10)
 
     root.mainloop()
 
 
-problem = EightQueen([])
-print(dfs(problem))
-print(dfs_visited(problem))
-print(dls(problem, 8))
-print(ids(problem))
-print(bfs(problem))
-print(uniform_cost(problem))
+def raw_exec_time(problem):
+    start_time = time.clock()
+    try:
+        dfs_agent(problem)
+        print("DFS: ", time.clock() - start_time, "seconds")
+    except Exception as e:
+        print("DFS: failed")
+    
+    start_time = time.clock()
+    dfs_visited_agent(problem)
+    print("DFSV: ", time.clock() - start_time, "seconds")
 
-result = dfs(problem)
-#result = dfs_visited(problem)
-#result = dls(problem, 8)
-#result = ids(problem)
-#result = bfs(problem)
-#result = uniform_cost(problem)
-show(result)
+    start_time = time.clock()
+    dls_agent(problem, 8)
+    print("DLS: ", time.clock() - start_time, "seconds")
+
+    start_time = time.clock()
+    ids_agent(problem)
+    print("IDS: ", time.clock() - start_time, "seconds")
+
+    start_time = time.clock()
+    bfs_agent(problem)
+    print("BFS: ", time.clock() - start_time, "seconds")
+
+    start_time = time.clock()
+    uniform_cost_agent(problem)
+    print("UCS: ", time.clock() - start_time, "seconds")
+
+
+if __name__ == '__main__':
+    problem = EightQueen([])
+    
+    raw_exec_time(problem)
+
+    solution = []
+    #dfs_agent(problem, lambda x: solution.append(x))
+    #dfs_visited_agent(problem, lambda x: solution.append(x))
+    #dls_agent(problem, 3, lambda x: solution.append(x))
+    #ids_agent(problem, lambda x: solution.append(x))
+    #bfs_agent(problem, lambda x: solution.append(x))
+    uniform_cost_agent(problem, lambda x: solution.append(x))
+    print(solution)
+
+    show(problem)

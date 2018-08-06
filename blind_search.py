@@ -1,3 +1,5 @@
+from functools import partial
+
 class Node:
     def __init__(self, state, parent=None, action=None, path_cost=0):
         self.state = state
@@ -10,7 +12,7 @@ class Node:
         i
 
 
-def bfs(problem):
+def __bfs(problem):
     node = Node(state = problem.initial_state, path_cost = 0)
     if problem.goal_test(node.state):
         return __solution(node)
@@ -29,7 +31,7 @@ def bfs(problem):
                 frontier.append(child)
 
 
-def uniform_cost(problem):
+def __uniform_cost(problem):
     node = Node(state = problem.initial_state, path_cost = 0)
     frontier = [node]
     explored = []
@@ -48,7 +50,7 @@ def uniform_cost(problem):
             frontier = [child if x.state == child.state and x.path_cost > child.path_cost else x for x in frontier]
 
             
-def dfs(problem):
+def __dfs(problem):
     node = Node(state = problem.initial_state, path_cost = 0)
     if problem.goal_test(node.state):
         return __solution(node)
@@ -60,14 +62,12 @@ def dfs(problem):
         for action in problem.actions(node.state):
             child = __child_node(problem, node, action)
             if not any(x for x in frontier if x.state == child.state):
-                #print([x.state for x in frontier])
-                #print(child.state)
                 if problem.goal_test(child.state):
                     return __solution(child)
                 frontier.append(child)
 
 
-def dfs_visited(problem):
+def __dfs_visited(problem):
     node = Node(state = problem.initial_state, path_cost = 0)
     if problem.goal_test(node.state):
         return __solution(node)
@@ -86,7 +86,7 @@ def dfs_visited(problem):
                 frontier.append(child)
 
 
-def dls(problem, limit):
+def __dls(problem, limit):
     node = Node(state = problem.initial_state)
     return __recursive_dls(node, problem, limit)
 
@@ -112,11 +112,11 @@ def __recursive_dls(node, problem, limit):
             raise Exception('Failure')
 
 
-def ids(problem):
+def __ids(problem):
     depth = 0
     while True:
         try:
-            result = dls(problem, depth)
+            result = __dls(problem, depth)
             return result
         except Exception as e:
             if e == 'Failure':
@@ -137,3 +137,35 @@ def __solution(node):
         node = node.parent
     return sol
 
+
+def __simple_problem_solving_agent(problem, search, callback):
+    try:
+        seq = search(problem)
+        while len(seq) != 0:
+            callback(seq.pop())
+    except Exception as e:
+        return
+
+
+def dfs_agent(problem, callback = None):
+    __simple_problem_solving_agent(problem, __dfs, callback)
+
+
+def dfs_visited_agent(problem, callback = None):
+    __simple_problem_solving_agent(problem, __dfs_visited, callback)
+
+
+def dls_agent(problem, limit, callback = None):
+    __simple_problem_solving_agent(problem, partial(__dls, limit=limit), callback)
+
+
+def ids_agent(problem, callback = None):
+    __simple_problem_solving_agent(problem, __ids, callback)
+
+
+def bfs_agent(problem, callback = None):
+    __simple_problem_solving_agent(problem, __bfs, callback)
+
+
+def uniform_cost_agent(problem, callback = None):
+    __simple_problem_solving_agent(problem, __uniform_cost, callback)

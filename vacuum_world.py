@@ -1,3 +1,4 @@
+import time
 from blind_search import *
 
 class VacuumWorld:
@@ -28,10 +29,42 @@ class VacuumWorld:
         return 1
 
 
-problem = VacuumWorld((VacuumWorld.LEFT, [VacuumWorld.LEFT, VacuumWorld.RIGHT]))
-print(dfs(problem))
-print(dfs_visited(problem))
-print(dls(problem, 3))
-print(ids(problem))
-print(bfs(problem))
-print(uniform_cost(problem))
+def raw_exec_time(problem):
+    start_time = time.clock()
+    dfs_agent(problem)
+    print("DFS: ", time.clock() - start_time, "seconds")
+    
+    start_time = time.clock()
+    dfs_visited_agent(problem)
+    print("DFSV: ", time.clock() - start_time, "seconds")
+
+    start_time = time.clock()
+    dls_agent(problem, 3)
+    print("DLS: ", time.clock() - start_time, "seconds")
+
+    start_time = time.clock()
+    ids_agent(problem)
+    print("IDS: ", time.clock() - start_time, "seconds")
+
+    start_time = time.clock()
+    bfs_agent(problem)
+    print("BFS: ", time.clock() - start_time, "seconds")
+
+    start_time = time.clock()
+    uniform_cost_agent(problem)
+    print("UCS: ", time.clock() - start_time, "seconds")
+
+
+if __name__ == '__main__':
+    problem = VacuumWorld((VacuumWorld.LEFT, [VacuumWorld.LEFT, VacuumWorld.RIGHT]))
+    
+    raw_exec_time(problem)
+    
+    solution = []
+    #dfs_agent(problem, lambda x: solution.append(x))
+    #dfs_visited_agent(problem, lambda x: solution.append(x))
+    #dls_agent(problem, 3, lambda x: solution.append(x))
+    #ids_agent(problem, lambda x: solution.append(x))
+    #bfs_agent(problem, lambda x: solution.append(x))
+    uniform_cost_agent(problem, lambda x: solution.append(x))
+    print(solution)
