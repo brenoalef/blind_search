@@ -142,7 +142,7 @@ def __simple_problem_solving_agent(problem, search, callback):
     try:
         seq = search(problem)
         while len(seq) != 0:
-            callback(seq.pop())
+            callback(seq.pop(0))
     except Exception as e:
         return
 
