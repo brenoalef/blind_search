@@ -32,27 +32,27 @@ class VacuumWorld:
 def raw_exec_time(problem):
     start_time = time.clock()
     dfs_agent(problem)
-    print("DFS: ", time.clock() - start_time, "seconds")
+    print("DFS: " + format(time.clock() - start_time, '.5f') + " seconds")
     
     start_time = time.clock()
     dfs_visited_agent(problem)
-    print("DFSV: ", time.clock() - start_time, "seconds")
+    print("DFSV: " + format(time.clock() - start_time, '.5f') + " seconds")
 
     start_time = time.clock()
     dls_agent(problem, 3)
-    print("DLS: ", time.clock() - start_time, "seconds")
+    print("DLS: " + format(time.clock() - start_time, '.5f') + " seconds")
 
     start_time = time.clock()
     ids_agent(problem)
-    print("IDS: ", time.clock() - start_time, "seconds")
+    print("IDS: " + format(time.clock() - start_time, '.5f') + " seconds")
 
     start_time = time.clock()
     bfs_agent(problem)
-    print("BFS: ", time.clock() - start_time, "seconds")
+    print("BFS: " + format(time.clock() - start_time, '.5f') + " seconds")
 
     start_time = time.clock()
     uniform_cost_agent(problem)
-    print("UCS: ", time.clock() - start_time, "seconds")
+    print("UCS: " + format(time.clock() - start_time, '.5f') + " seconds")
 
 
 if __name__ == '__main__':
@@ -61,10 +61,30 @@ if __name__ == '__main__':
     raw_exec_time(problem)
     
     solution = []
-    #dfs_agent(problem, lambda x: solution.append(x))
-    #dfs_visited_agent(problem, lambda x: solution.append(x))
-    #dls_agent(problem, 3, lambda x: solution.append(x))
-    #ids_agent(problem, lambda x: solution.append(x))
-    #bfs_agent(problem, lambda x: solution.append(x))
+    '''
+    dfs_agent(problem, lambda x: solution.append(x))
+    print("DFS: ", solution)
+    solution = []
+    '''
+    '''
+    dfs_visited_agent(problem, lambda x: solution.append(x))
+    print("DFSV: ", solution)
+    solution = []
+    '''
+    '''
+    dls_agent(problem, 3, lambda x: solution.append(x))
+    print("DLS: ", solution)
+    solution = []
+    '''
+    '''
+    ids_agent(problem, lambda x: solution.append(x))
+    print("IDS: ", solution)
+    solution = []
+    '''
+    '''
+    bfs_agent(problem, lambda x: solution.append(x))
+    print("BFS: ", solution)
+    solution = []
+    '''
     uniform_cost_agent(problem, lambda x: solution.append(x))
-    print(solution)
+    print("UCS: ", solution)
